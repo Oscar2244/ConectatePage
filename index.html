@@ -1,155 +1,629 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ConeTate | Control Avanzado de Redes WiFi</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Montserrat:wght@700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
-    <script src="https://kit.fontawesome.com/eb496b1484.js" crossorigin="anonymous"></script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>coNETate · WiFi con control de acceso</title>
+<meta name="description" content="coNETate es un portal cautivo WiFi con control de acceso: cada persona entra con su cédula y su correo, y un panel administra usuarios, sesiones, visitantes y bloqueos de contenido sobre un router MikroTik.">
+<meta property="og:title" content="coNETate · WiFi con control de acceso">
+<meta property="og:description" content="Portal cautivo WiFi con panel de administración, visitantes, bloqueo de contenido y auditoría. Probá la demo interactiva.">
+<meta name="theme-color" content="#0E1117">
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preload" href="assets/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/syne-latin.woff2" as="font" type="font/woff2" crossorigin>
+<script>
+  // Tema antes del primer dibujo (igual que el sistema: lo guardado, o lo que pide el equipo)
+  (function () {
+    var t = null;
+    try { t = localStorage.getItem('conetate_web_tema'); } catch (e) {}
+    if (!t) t = matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', t);
+  })();
+</script>
+<link rel="stylesheet" href="assets/css/estilos.css">
+<script src="assets/js/mbopi.js"></script>
 </head>
-
-
 <body>
-    <header id="main-header">
-        <nav class="navbar">
-            <div class="logo">CONE<span>TATE</span></div>
-            <ul class="nav-links"> 
-                <li><a href="#inicio">INICIO</a></li>
-                <li><a href="#servicios">SERVICIOS</a></li>
-                <li><a href="#impacto">IMPACTO</a></li>
-                <li><a href="#sobre-nosotros">NOSOTROS</a></li>
-                <li><a href="#soporte">SOPORTE</a></li>
-            </ul>
-            <a href="#soporte" class="btn-cta">SOLICITAR DEMO</a>
-        </nav>
-    </header>
+<a class="saltar" href="#contenido">Saltar al contenido</a>
 
-    <section id="inicio" class="hero">
-        <div class="network-pattern"></div>
-        <div class="hero-overlay"></div>
-        <div class="hero-content">
-            <span class="badge"><i class="fas fa-shield-alt"></i> Tecnología de Control WiFi</span>
-            <h1>Seguridad y Control <br><span class="highlight">Total en tu Red</span></h1>
-            <p>Optimiza el ancho de banda y gestiona dispositivos por usuario con nuestra solución institucional.</p>
-            
-            <div class="hero-contact-info">
-                <span><i class="fas fa-envelope"></i> coneTate@gmail.com</span>
-                <span><i class="fas fa-phone"></i> Contactos: 0997555444</span>
-            </div>
+<!-- Íconos (trazos, como en el sistema; nunca emojis) -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-wifi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.55a11 11 0 0 1 14.08 0M1.42 9a16 16 0 0 1 21.16 0M8.53 16.11a6 6 0 0 1 6.95 0"/><circle cx="12" cy="20" r="1"/></symbol>
+    <symbol id="i-wifi-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 1l22 22M16.72 11.06A10.94 10.94 0 0 1 19 12.55M5 12.55a10.94 10.94 0 0 1 5.17-2.39M10.71 5.05A16 16 0 0 1 22.58 9M1.42 9a15.91 15.91 0 0 1 4.7-2.88M8.53 16.11a6 6 0 0 1 6.95 0"/><circle cx="12" cy="20" r="1"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></symbol>
+    <symbol id="i-x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></symbol>
+    <symbol id="i-x-circle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M15 9l-6 6M9 9l6 6"/></symbol>
+    <symbol id="i-lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></symbol>
+    <symbol id="i-shield" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></symbol>
+    <symbol id="i-user" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></symbol>
+    <symbol id="i-users" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></symbol>
+    <symbol id="i-clock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></symbol>
+    <symbol id="i-globe" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></symbol>
+    <symbol id="i-mail" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 6l-10 7L2 6"/></symbol>
+    <symbol id="i-id" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></symbol>
+    <symbol id="i-grid" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></symbol>
+    <symbol id="i-file" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/></symbol>
+    <symbol id="i-settings" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></symbol>
+    <symbol id="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4.5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></symbol>
+    <symbol id="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></symbol>
+    <symbol id="i-play" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.6-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z"/></symbol>
+    <symbol id="i-github" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5a11.5 11.5 0 0 0-3.64 22.41c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.53-1.33-1.28-1.69-1.28-1.69-1.05-.71.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.77 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.84 1.19 3.1 0 4.42-2.7 5.4-5.26 5.68.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .5z"/></symbol>
+    <symbol id="i-back" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></symbol>
+    <symbol id="i-refresh" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 4v6h-6M1 20v-6h6"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></symbol>
+    <symbol id="i-phone" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="6" y="2" width="12" height="20" rx="2.5"/><path d="M11 18h2"/></symbol>
+    <symbol id="i-laptop" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="11" rx="1.5"/><path d="M2 19h20"/></symbol>
+    <symbol id="i-bell" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 0 1-3.46 0"/></symbol>
+    <symbol id="i-upload" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></symbol>
+    <symbol id="i-palette" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22a10 10 0 1 1 10-10c0 2.5-2 4-4.5 4H15a2 2 0 0 0-1.5 3.3A1.6 1.6 0 0 1 12 22z"/><circle cx="7.5" cy="11.5" r="1.2" fill="currentColor"/><circle cx="10.5" cy="7" r="1.2" fill="currentColor"/><circle cx="15.5" cy="7.5" r="1.2" fill="currentColor"/></symbol>
+    <symbol id="i-lang" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h9M8.5 3v2M11 5c-1 4-4 7-7 8.5M6.5 9c1 2 3 3.5 5 4.5"/><path d="M13 21l4-9 4 9M14.5 18h5"/></symbol>
+    <symbol id="i-zap" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></symbol>
+    <symbol id="i-server" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="3" width="20" height="8" rx="2"/><rect x="2" y="13" width="20" height="8" rx="2"/><path d="M6 7h.01M6 17h.01"/></symbol>
+    <symbol id="i-router" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="14" width="20" height="7" rx="2"/><path d="M6 17.5h.01M10 17.5h.01M8 14V9M16 14V9M5.5 6.5a7 7 0 0 1 13 0M8.5 9a3.5 3.5 0 0 1 7 0"/></symbol>
+    <symbol id="i-db" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></symbol>
+    <symbol id="i-school" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10L12 5 2 10l10 5 10-5z"/><path d="M6 12v5c3 2 9 2 12 0v-5"/></symbol>
+    <symbol id="i-bed" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4v16M2 8h18a2 2 0 0 1 2 2v10M2 17h20"/><path d="M6 8v4h6V8"/></symbol>
+    <symbol id="i-store" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l1.5-5h15L21 9M3 9v11h18V9M3 9a3 3 0 0 0 6 0 3 3 0 0 0 6 0 3 3 0 0 0 6 0"/><path d="M10 20v-5h4v5"/></symbol>
+    <symbol id="i-calendar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></symbol>
+    <symbol id="i-alert" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><path d="M12 9v4M12 17h.01"/></symbol>
+    <symbol id="i-logout" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></symbol>
+    <symbol id="i-ban" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M4.93 4.93l14.14 14.14"/></symbol>
+    <symbol id="i-activity" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></symbol>
+    <symbol id="i-key" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="7.5" cy="15.5" r="5.5"/><path d="M21 2l-9.6 9.6M15.5 7.5l3 3L22 7l-3-3"/></symbol>
+    <symbol id="i-share" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.59 13.51l6.83 3.98M15.41 6.51l-6.82 3.98"/></symbol>
+    <symbol id="i-msg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></symbol>
+    <symbol id="i-book" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V2H6.5A2.5 2.5 0 0 0 4 4.5v15zM20 17v5H6.5A2.5 2.5 0 0 1 4 19.5"/></symbol>
+    <symbol id="i-game" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="4"/><path d="M6 12h4M8 10v4M15 11h.01M18 13h.01"/></symbol>
+    <symbol id="i-spark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.9 5.8L20 11l-6.1 2.2L12 19l-1.9-5.8L4 11l6.1-2.2z"/></symbol>
+    <symbol id="i-film" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="2" width="20" height="20" rx="2.5"/><path d="M7 2v20M17 2v20M2 12h20M2 7h5M2 17h5M17 17h5M17 7h5"/></symbol>
+    <symbol id="i-camera" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><path d="M17.5 6.5h.01"/></symbol>
+    <symbol id="i-note" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></symbol>
+    <symbol id="i-yt" viewBox="0 0 24 24" fill="currentColor"><path d="M10 15.5v-7l6 3.5z"/></symbol>
+  </defs>
+</svg>
 
-            <div class="hero-btns">
-                <a href="#servicios" class="btn-main">Nuestras Soluciones</a>
-                <a href="#soporte" class="btn-outline">Soporte Técnico</a>
+<!-- ═══ BARRA SUPERIOR ═══ -->
+<header class="nav" id="nav">
+  <div class="contenedor nav-in">
+    <a class="nav-marca" href="#inicio" aria-label="coNETate, ir al inicio">
+      <span data-mbopi="funcionando" data-mbopi-compacto data-mbopi-ficha="no"></span>
+      <span class="logo">co<span class="logo-net">NET</span>ate</span>
+    </a>
+    <nav class="nav-links" aria-label="Secciones">
+      <a href="#que-es">Qué es</a>
+      <a href="#como-funciona">Cómo funciona</a>
+      <a href="#demo">Demo</a>
+      <a href="#funciones">Funciones</a>
+      <a href="#tecnologia">Tecnología</a>
+      <a href="#preguntas">Preguntas</a>
+    </nav>
+    <div class="nav-acciones">
+      <button class="btn-icono" id="btnTema" type="button" aria-label="Cambiar entre tema claro y oscuro" title="Cambiar tema">
+        <svg class="icono-luna"><use href="#i-moon"/></svg><svg class="icono-sol"><use href="#i-sun"/></svg>
+      </button>
+      <a class="btn btn-primario btn-chico" href="#demo"><svg><use href="#i-play"/></svg>Probar la demo</a>
+    </div>
+  </div>
+</header>
+
+<main id="contenido">
+
+<!-- ═══ PORTADA ═══ -->
+<section class="hero" id="inicio">
+  <div class="contenedor hero-grid">
+    <div class="revelar">
+      <span class="eyebrow">Portal cautivo WiFi · Proyecto de tesis</span>
+      <h1>Tu WiFi, con <span class="resalte">nombre y apellido</span>.</h1>
+      <p class="hero-sub">coNETate controla quién entra a la red WiFi de tu institución. Cada persona se conecta con su <b>cédula</b> y su <b>correo</b>, y desde un panel ves quién está conectado, aprobás visitantes, bloqueás redes sociales y tenés el registro de todo lo que pasó.</p>
+      <div class="hero-botones">
+        <a class="btn btn-primario" href="#demo"><svg><use href="#i-play"/></svg>Probar la demo interactiva</a>
+        <a class="btn btn-sec" href="#como-funciona">Cómo funciona</a>
+      </div>
+      <div class="hero-chips">
+        <span class="chip"><svg><use href="#i-check"/></svg>Sin contraseña compartida</span>
+        <span class="chip"><svg><use href="#i-check"/></svg>Funciona sin internet en el panel</span>
+        <span class="chip"><svg><use href="#i-check"/></svg>Router MikroTik real</span>
+      </div>
+    </div>
+    <div class="hero-arte revelar" aria-hidden="true">
+      <div class="hero-ondas"><span></span><span></span><span></span></div>
+      <span data-mbopi="funcionando" data-mbopi-ficha="no"></span>
+      <div class="hero-burbuja hb-1"><span class="punto"></span><span><b>María G.</b> se conectó</span></div>
+      <div class="hero-burbuja hb-2"><span class="punto"></span><span>TikTok <b>bloqueado</b></span></div>
+      <div class="hero-burbuja hb-3"><span class="punto"></span><span>Visitante <b>pide acceso</b></span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ QUÉ ES ═══ -->
+<section id="que-es">
+  <div class="contenedor">
+    <div class="titular revelar">
+      <span class="eyebrow">Qué es</span>
+      <h2>Una puerta de entrada para tu red WiFi</h2>
+      <p>Hoy la mayoría de las instituciones comparte una contraseña del WiFi. coNETate la reemplaza por un <b>portal cautivo</b>: la pantalla que aparece sola al conectarte, como en un aeropuerto o un hotel. Sin registrarte, no hay internet.</p>
+    </div>
+    <div class="comparar">
+      <div class="comp-caja comp-mal revelar">
+        <h3><span class="ic"><svg><use href="#i-key"/></svg></span>WiFi con contraseña</h3>
+        <ul>
+          <li><svg><use href="#i-x"/></svg>La clave circula por grupos de WhatsApp y termina en manos de cualquiera.</li>
+          <li><svg><use href="#i-x"/></svg>No sabés quién está conectado ni desde cuándo.</li>
+          <li><svg><use href="#i-x"/></svg>Para sacar a alguien hay que cambiar la clave… a todos.</li>
+          <li><svg><use href="#i-x"/></svg>No hay forma de limitar redes sociales o juegos en horario de clase.</li>
+          <li><svg><use href="#i-x"/></svg>Un visitante necesita que alguien le dicte la contraseña.</li>
+        </ul>
+      </div>
+      <div class="comp-caja comp-bien revelar">
+        <h3><span class="ic"><svg><use href="#i-shield"/></svg></span>WiFi con coNETate</h3>
+        <ul>
+          <li><svg><use href="#i-check"/></svg>Cada persona entra con su cédula y su correo registrados.</li>
+          <li><svg><use href="#i-check"/></svg>Ves en vivo quién está conectado, con qué equipo y cuánto consume.</li>
+          <li><svg><use href="#i-check"/></svg>Cortás el acceso de una persona con un clic, sin tocar a los demás.</li>
+          <li><svg><use href="#i-check"/></svg>Bloqueás TikTok, Instagram o juegos desde un catálogo listo.</li>
+          <li><svg><use href="#i-check"/></svg>Los visitantes piden acceso desde el celular y vos lo aprobás con tiempo límite.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ CÓMO FUNCIONA ═══ -->
+<section id="como-funciona" class="seccion-alt">
+  <div class="contenedor">
+    <div class="titular centrado revelar">
+      <span class="eyebrow">Cómo funciona</span>
+      <h2>De «sin internet» a «conectado» en cinco pasos</h2>
+      <p>Todo pasa en segundos y la persona no instala nada.</p>
+    </div>
+    <div class="pasos">
+      <div class="paso"><div class="paso-ic"><svg><use href="#i-wifi"/></svg></div><div><h3>Se conecta al WiFi</h3><p>La red es abierta, pero el router no deja salir a internet a nadie que no esté autorizado.</p></div></div>
+      <div class="paso"><div class="paso-ic"><svg><use href="#i-phone"/></svg></div><div><h3>Aparece el portal</h3><p>El celular detecta el portal cautivo y abre solo la pantalla de coNETate.</p></div></div>
+      <div class="paso"><div class="paso-ic"><svg><use href="#i-id"/></svg></div><div><h3>Cédula y correo</h3><p>Se verifica que la persona esté registrada, activa y sin pasarse del límite de dispositivos.</p></div></div>
+      <div class="paso"><div class="paso-ic"><svg><use href="#i-router"/></svg></div><div><h3>El MikroTik autoriza</h3><p>coNETate agrega la IP del equipo a la lista de autorizados del router por su API.</p></div></div>
+      <div class="paso"><div class="paso-ic"><svg><use href="#i-globe"/></svg></div><div><h3>¡A navegar!</h3><p>Queda registrado en la auditoría y aparece al instante en el panel del administrador.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ DEMO ═══ -->
+<section id="demo" class="demo-seccion">
+  <div class="contenedor">
+    <div class="titular centrado revelar">
+      <span class="eyebrow">Demo interactiva</span>
+      <h2>Probalo vos mismo</h2>
+      <p>A la izquierda, el celular de una persona que llega a la institución. A la derecha, el panel del administrador. Lo que hacés en uno se ve en el otro. Todo es una simulación con datos de ejemplo: no se envía nada a ningún lado.</p>
+    </div>
+
+    <div class="mision" aria-live="polite">
+      <span data-mbopi="funcionando" data-mbopi-compacto data-mbopi-ficha="no" id="misionMbopi"></span>
+      <div class="mision-texto">
+        <small id="misionNum">Misión 1 de 6</small>
+        <b id="misionTexto">Tocá la red «Instituto Ejemplo» en el celular para conectarte.</b>
+      </div>
+      <div class="mision-pasos" id="misionPasos" aria-label="Progreso de las misiones"></div>
+    </div>
+
+    <div class="demo-cambiar" role="tablist" aria-label="Qué mostrar">
+      <button role="tab" aria-selected="true" data-ver="celular">Celular<span class="avisito" id="avisoCel"></span></button>
+      <button role="tab" aria-selected="false" data-ver="panel">Panel admin<span class="avisito" id="avisoPanel"></span></button>
+    </div>
+
+    <div class="demo demo-marca" id="demo-app" data-vista="celular" data-marca="azul">
+      <!-- ── Celular ── -->
+      <div class="cel-col">
+        <div class="cel" aria-label="Celular simulado">
+          <div class="cel-pantalla">
+            <div class="cel-barra">
+              <span id="celHora">9:41</span>
+              <span class="cel-barra-ic"><svg><use href="#i-wifi" id="celWifiIc"/></svg><span class="cel-wifi-alerta" id="celWifiAlerta" hidden>!</span><svg viewBox="0 0 24 24" fill="currentColor"><rect x="2" y="7" width="18" height="10" rx="2.5" fill="none" stroke="currentColor" stroke-width="2"/><rect x="4.5" y="9.5" width="11" height="5" rx="1"/><rect x="21" y="10" width="2" height="4" rx="1"/></svg></span>
             </div>
+            <button class="cel-noti" id="celNoti" type="button"><span class="cel-noti-ic"><svg><use href="#i-wifi"/></svg></span><span><b id="celNotiTit">Iniciá sesión en la red</b><span id="celNotiTxt">Instituto Ejemplo</span></span></button>
+            <div class="cel-cuerpo">
+
+              <!-- Redes WiFi -->
+              <div class="cel-vista activa" data-cel="redes">
+                <div class="c-titulo">WiFi</div>
+                <p class="c-sub">Redes disponibles</p>
+                <div class="red-lista">
+                  <button class="red-item abierta" type="button" id="btnRed"><svg><use href="#i-wifi"/></svg><div><b class="org-nombre">Instituto Ejemplo</b><small>Abierta · Tocá para conectarte</small></div></button>
+                  <div class="red-item"><svg><use href="#i-wifi"/></svg><div><b>Casa_Vecino_5G</b><small>Protegida</small></div><svg class="candado"><use href="#i-lock"/></svg></div>
+                  <div class="red-item"><svg><use href="#i-wifi"/></svg><div><b>Kiosco Don Pedro</b><small>Protegida</small></div><svg class="candado"><use href="#i-lock"/></svg></div>
+                </div>
+                <div class="c-pie">Celular de ejemplo · Android</div>
+              </div>
+
+              <!-- Portal -->
+              <div class="cel-vista" data-cel="portal">
+                <div class="portal-cab">
+                  <span class="portal-mbopi" data-mbopi="funcionando" data-mbopi-ficha="no"></span>
+                  <div class="portal-org org-nombre">Instituto Ejemplo</div>
+                  <div class="portal-tit" id="portalTitulo">Portal de acceso a internet</div>
+                  <span class="pildora pil-roja"><svg><use href="#i-x-circle"/></svg>Sin acceso · Registrate para conectarte</span>
+                </div>
+                <div class="pasitos"><span class="ok"><i><svg width="11" height="11"><use href="#i-check"/></svg></i></span>WiFi<hr><span class="act"><i>2</i></span>Registro<hr><span><i>3</i></span>Acceso</div>
+                <form id="formPortal" novalidate autocomplete="off">
+                  <div class="c-error" id="portalError" role="alert"></div>
+                  <div class="campo"><label for="pCi">Cédula de identidad</label><input id="pCi" inputmode="numeric" placeholder="Ej: 4567890"></div>
+                  <div class="campo"><label for="pCorreo">Correo electrónico</label><input id="pCorreo" type="email" placeholder="tu_correo@ejemplo.com"></div>
+                  <button class="c-btn" type="submit">Conectarse a internet</button>
+                </form>
+                <button class="c-enlace" type="button" id="btnIrVisitante">Solicitar acceso como visitante</button>
+                <button class="c-pista" type="button" id="btnPista"><b>Datos de prueba:</b> CI <b>4567890</b> · maria@ejemplo.com<br>Tocá acá para completarlos.</button>
+                <div class="c-pie">Powered by <b class="logo" style="font-size:12px">co<span class="logo-net">NET</span>ate</b></div>
+              </div>
+
+              <!-- Bienvenida -->
+              <div class="cel-vista" data-cel="bienvenida">
+                <div class="bv-check"><svg><use href="#i-check"/></svg></div>
+                <div class="c-titulo" style="text-align:center" id="bvNombre">¡Listo, María!</div>
+                <p class="c-sub" style="text-align:center;margin-bottom:8px" id="bvMensaje">Ya tenés acceso a internet.</p>
+                <span class="pildora pil-ambar" id="bvVence" hidden style="align-self:center;margin:0 0 8px"><svg><use href="#i-clock"/></svg><span></span></span>
+                <div class="bv-reloj" id="bvReloj" aria-label="Tiempo conectado">00:00</div>
+                <p class="c-sub" style="text-align:center;margin:0">tiempo conectado</p>
+                <div class="bv-datos">
+                  <div><small>Consumo</small><b id="bvConsumo">0 MB</b></div>
+                  <div><small>Dispositivos</small><b id="bvDisp">1 de 3</b></div>
+                </div>
+                <button class="c-btn" type="button" id="btnNavegar">Abrir el navegador</button>
+                <button class="c-btn peligro" type="button" id="btnSalirCel" style="margin-top:8px">Cerrar mi sesión</button>
+              </div>
+
+              <!-- Navegador -->
+              <div class="cel-vista" data-cel="navegador">
+                <div class="nav-cel"><button type="button" data-volver="bienvenida" aria-label="Volver"><svg><use href="#i-back"/></svg></button><span class="url">Buscar o escribir una dirección</span></div>
+                <p class="c-sub" style="margin-bottom:14px">Probá abrir algunos sitios. Los que estén bloqueados en <b>Control de red</b> no van a cargar.</p>
+                <div class="apps" id="apps"></div>
+              </div>
+
+              <!-- Sitio abierto -->
+              <div class="cel-vista" data-cel="sitio">
+                <div class="nav-cel"><button type="button" data-volver="navegador" aria-label="Volver"><svg><use href="#i-back"/></svg></button><span class="url" id="sitioUrl">tiktok.com</span><button type="button" id="btnRecargar" aria-label="Recargar"><svg><use href="#i-refresh"/></svg></button></div>
+                <div class="sitio" id="sitio"></div>
+              </div>
+
+              <!-- Visitante -->
+              <div class="cel-vista" data-cel="visitante">
+                <div class="nav-cel"><button type="button" data-volver="portal" aria-label="Volver"><svg><use href="#i-back"/></svg></button><span class="url">Solicitud de visitante</span></div>
+                <div class="c-titulo" style="font-size:19px">Pedí acceso</div>
+                <p class="c-sub">Un administrador recibe tu pedido y te da acceso por un tiempo.</p>
+                <form id="formVisitante" novalidate autocomplete="off">
+                  <div class="c-error" id="visError" role="alert"></div>
+                  <div class="campo"><label for="vNombre">Nombre y apellido</label><input id="vNombre" placeholder="Ej: Carlos Benítez"></div>
+                  <div class="campo"><label for="vCi">Cédula</label><input id="vCi" inputmode="numeric" placeholder="Ej: 3214567"></div>
+                  <div class="campo"><label for="vMotivo">Motivo de la visita</label><textarea id="vMotivo" placeholder="Ej: Reunión con dirección"></textarea></div>
+                  <button class="c-btn" type="submit">Enviar solicitud</button>
+                </form>
+                <button class="c-pista" type="button" id="btnPistaVis">Tocá acá para completar con datos de ejemplo.</button>
+              </div>
+
+              <!-- Esperando aprobación -->
+              <div class="cel-vista" data-cel="espera">
+                <span class="espera-mbopi" data-mbopi="no_encontrado" data-mbopi-ficha="no"></span>
+                <div class="c-titulo" style="text-align:center;font-size:19px">Esperando aprobación<span class="puntitos"><i></i><i></i><i></i></span></div>
+                <p class="c-sub" style="text-align:center">Tu solicitud llegó al administrador. Esta pantalla avanza sola cuando la apruebe.</p>
+                <div class="nota" style="font-size:12px">Ahora andá al <b>panel</b> → <b>Usuarios</b> y aprobala.</div>
+                <button class="c-btn sec" type="button" id="btnCancelarSol" style="margin-top:auto">Cancelar solicitud</button>
+              </div>
+
+              <!-- Rechazada -->
+              <div class="cel-vista" data-cel="rechazada">
+                <span class="espera-mbopi" data-mbopi="sin_router" data-mbopi-ficha="no"></span>
+                <div class="c-titulo" style="text-align:center;font-size:19px">Solicitud rechazada</div>
+                <p class="c-sub" style="text-align:center" id="rechMotivo">El administrador no aprobó el acceso.</p>
+                <button class="c-btn sec" type="button" data-volver="portal" style="margin-top:auto">Volver al portal</button>
+              </div>
+
+            </div>
+          </div>
         </div>
-    </section>
+        <p class="cel-nota">Celular simulado. En la vida real, el portal se abre solo al conectarse a la red.</p>
+      </div>
 
- <!-- SECCIÓN SERVICIOS Y PREVISUALIZACIÓN -->
-    <section id="servicios" class="services">
-        <div class="container">
-            <h2 class="section-title">Servicios Especializados</h2>
-            
-            <!-- Tarjetas de servicios (las que ya tenías) -->
-            <div class="services-grid">
-                <div class="service-card">
-                    <i class="fas fa-wifi icon-main"></i>
-                    <h3>Gestión de Red</h3>
-                    <p>Controlamos la distribución de señal para asegurar que cada área tenga la potencia necesaria.</p>
-                </div>
-                <div class="service-card">
-                    <i class="fas fa-user-shield icon-main"></i>
-                    <h3>Seguridad WiFi</h3>
-                    <p>Filtramos accesos y bloqueamos aplicaciones de alto consumo para proteger tu ancho de banda.</p>
-                </div>
-                <div class="service-card">
-                    <i class="fas fa-database icon-main"></i>
-                    <h3>Base de Datos</h3>
-                    <p>Vinculamos el acceso al sistema con la base de datos de tu institución para mayor control.</p>
-                </div>
+      <!-- ── Panel admin ── -->
+      <div class="panel-demo" aria-label="Panel de administración simulado">
+        <div class="pd-navegador"><span class="pd-puntos"><i></i><i></i><i></i></span><span class="pd-url" id="pdUrl">192.168.99.10:8000/admin/dashboard</span></div>
+        <div class="pd-cuerpo">
+          <nav class="pd-lateral" aria-label="Menú del panel">
+            <div class="pd-logo"><span data-mbopi="funcionando" data-mbopi-compacto data-mbopi-ficha="no"></span><span class="logo">co<span class="logo-net">NET</span>ate</span></div>
+            <div class="pd-sec">Principal</div>
+            <button class="pd-item" type="button" data-pd="dashboard" aria-current="page"><svg><use href="#i-grid"/></svg>Dashboard</button>
+            <button class="pd-item" type="button" data-pd="usuarios"><svg><use href="#i-user"/></svg>Usuarios<span class="pd-badge ambar" id="badgeSol"></span></button>
+            <button class="pd-item" type="button" data-pd="sesiones"><svg><use href="#i-clock"/></svg>Sesiones<span class="pd-badge" id="badgeSes"></span></button>
+            <button class="pd-item" type="button" data-pd="red"><svg><use href="#i-wifi"/></svg>Control de red</button>
+            <div class="pd-sec">Sistema</div>
+            <button class="pd-item" type="button" data-pd="auditoria"><svg><use href="#i-file"/></svg>Auditoría</button>
+            <button class="pd-item" type="button" data-pd="config"><svg><use href="#i-settings"/></svg>Configuración</button>
+            <div class="pd-yo"><span class="avatar" style="--h:212">A</span><div>Administración<small>Superadmin</small></div></div>
+          </nav>
+          <div class="pd-main">
+            <div class="pd-top">
+              <div><h3 id="pdTitulo">Dashboard</h3><p id="pdSub">Resumen general del sistema en tiempo real</p></div>
+              <span class="estado-router pd-estado"><i></i>MikroTik Online</span>
             </div>
 
-            <!-- NUEVA SUB-SECCIÓN: PREVISUALIZACIÓN DE INTERFAZ -->
-            <div class="software-preview">
-                <div class="preview-text">
-                    <h3>Interfaz Intuitiva y Potente</h3>
-                    <p>Visualiza el estado de tu red en tiempo real, gestiona usuarios activos y configura filtros de contenido con un solo clic.</p>
+            <!-- Dashboard -->
+            <div class="pd-vista activa" data-pdv="dashboard">
+              <div class="kpis">
+                <div class="kpi" id="kpiCon" style="--acc:var(--green)"><b>0</b><span>Conectados ahora</span></div>
+                <div class="kpi" id="kpiHoy" style="--acc:var(--blue-light)"><b>0</b><span>Sesiones hoy</span></div>
+                <div class="kpi" id="kpiSol" style="--acc:var(--amber)"><b>0</b><span>Solicitudes</span></div>
+                <div class="kpi" id="kpiBloq" style="--acc:var(--red)"><b>0</b><span>Intentos bloqueados</span></div>
+              </div>
+              <div class="dos-col">
+                <div class="tarjeta">
+                  <div class="tarjeta-tit"><svg width="14" height="14"><use href="#i-activity"/></svg>Tráfico en vivo<span class="der" id="trafAhora">— Mbps</span></div>
+                  <svg class="grafico" id="grafico" viewBox="0 0 300 140" preserveAspectRatio="none" aria-label="Gráfico de tráfico de los últimos minutos"></svg>
+                  <div class="leyenda"><span><i style="background:var(--blue-light)"></i>Entra de internet</span><span><i style="background:var(--green)"></i>Llega a los usuarios</span></div>
                 </div>
-                
-                <div class="preview-gallery">
-                    <!-- Imagen 1: Dashboard Principal -->
-                    <div class="preview-item">
-                        <span class="preview-label">Panel de Control en Tiempo Real</span>
-                        <img src="dashboard.jpg.jpeg" alt="Dashboard coNETate" class="software-img">
-                    </div>
-                    
-                    <!-- Imagen 2: Configuración -->
-                    <div class="preview-item">
-                        <span class="preview-label">Configuración Guiada de Red</span>
-                        <img src="configuracion.jpg.jpeg" alt="Configuración MikroTik coNETate" class="software-img">
-                    </div>
+                <div class="tarjeta">
+                  <div class="tarjeta-tit"><svg width="14" height="14"><use href="#i-server"/></svg>Router</div>
+                  <div class="anillos">
+                    <div class="anillo"><svg viewBox="0 0 80 80" id="anCpu"></svg>CPU</div>
+                    <div class="anillo"><svg viewBox="0 0 80 80" id="anRam"></svg>RAM</div>
+                  </div>
                 </div>
+              </div>
+              <div class="tarjeta" style="margin-bottom:0">
+                <div class="tarjeta-tit"><svg width="14" height="14"><use href="#i-file"/></svg>Actividad reciente<button class="der" type="button" data-pd="auditoria" style="background:none;border:0;color:var(--blue-light);font-size:12px">Ver todo →</button></div>
+                <ul class="eventos" id="evDash"></ul>
+              </div>
             </div>
+
+            <!-- Usuarios -->
+            <div class="pd-vista" data-pdv="usuarios">
+              <div id="solicitudes"></div>
+              <div class="tarjeta">
+                <div class="tarjeta-tit"><svg width="14" height="14"><use href="#i-users"/></svg>Usuarios registrados<span class="der" id="cantUsu"></span></div>
+                <div class="tabla-caja"><table class="tabla"><thead><tr><th>Persona</th><th class="oculto-cq">CI</th><th>Estado</th><th style="text-align:right">Acceso</th></tr></thead><tbody id="tablaUsu"></tbody></table></div>
+              </div>
+              <div class="nota">En el sistema real también se <b>importan</b> desde Excel o CSV, se editan, se limita la cantidad de dispositivos por persona y se exporta la lista a PDF, Excel o CSV.</div>
+            </div>
+
+            <!-- Sesiones -->
+            <div class="pd-vista" data-pdv="sesiones">
+              <div class="tarjeta">
+                <div class="tarjeta-tit"><svg width="14" height="14"><use href="#i-clock"/></svg>Sesiones abiertas<span class="der" id="cantSes"></span></div>
+                <div class="tabla-caja"><table class="tabla"><thead><tr><th>Persona</th><th class="oculto-cq">Equipo · IP</th><th>Tiempo</th><th style="text-align:right">Acción</th></tr></thead><tbody id="tablaSes"></tbody></table></div>
+              </div>
+              <div class="nota">Si un equipo se va del WiFi más tiempo que la tolerancia configurada, la sesión se cierra sola. Si vuelve con otra IP, coNETate la reconoce por su MAC y la mueve.</div>
+            </div>
+
+            <!-- Control de red -->
+            <div class="pd-vista" data-pdv="red">
+              <div class="tarjeta">
+                <div class="tarjeta-tit"><svg width="14" height="14"><use href="#i-ban"/></svg>Catálogo de servicios<span class="der" id="cantBloq"></span></div>
+                <div class="catalogo" id="catalogo"></div>
+              </div>
+              <div class="nota">Cada bloqueo se envía al MikroTik como DNS estático: <code>^(.*\.)?tiktok\.com$ → 127.0.0.1</code>. Además se cierran los atajos para saltarse el bloqueo (DNS cifrado, Private Relay del iPhone).</div>
+            </div>
+
+            <!-- Auditoría -->
+            <div class="pd-vista" data-pdv="auditoria">
+              <div class="tarjeta">
+                <div class="tarjeta-tit"><svg width="14" height="14"><use href="#i-file"/></svg>Hoy<span class="der" id="cantEv"></span></div>
+                <ul class="eventos" id="evTodos"></ul>
+              </div>
+              <div class="nota">Cada acción queda registrada con quién la hizo, desde qué IP y qué cambió (antes → después). Se filtra por fecha, categoría y severidad, y se exporta como informe PDF, CSV o JSON.</div>
+            </div>
+
+            <!-- Configuración -->
+            <div class="pd-vista" data-pdv="config">
+              <div class="tarjeta">
+                <div class="tarjeta-tit"><svg width="14" height="14"><use href="#i-palette"/></svg>Colores y textos del portal</div>
+                <div class="form-fila">
+                  <div class="campo"><label for="cfgOrg">Nombre de la organización</label><input id="cfgOrg" maxlength="32" value="Instituto Ejemplo"></div>
+                  <div class="campo"><label for="cfgTit">Título del portal</label><input id="cfgTit" maxlength="40" value="Portal de acceso a internet"></div>
+                </div>
+                <div class="campo" style="margin-bottom:0"><label>Color de la marca</label></div>
+                <div class="colores" id="colores" role="group" aria-label="Color de la marca"></div>
+                <p style="margin:0;font-size:12.5px;color:var(--text2)">Mirá el celular: el portal cambia al momento. En el sistema real se elige cualquier color y coNETate calcula los tonos para que el texto se lea bien en tema claro y oscuro.</p>
+              </div>
+              <div class="tarjeta" style="margin-bottom:0">
+                <div class="tarjeta-tit"><svg width="14" height="14"><use href="#i-users"/></svg>Límites</div>
+                <div class="form-fila">
+                  <div class="campo"><label for="cfgDisp">Dispositivos por persona</label><select id="cfgDisp"><option>1</option><option>2</option><option selected>3</option><option>5</option></select></div>
+                  <div class="campo"><label for="cfgTol">Cerrar sesión tras ausencia de</label><select id="cfgTol"><option>10 minutos</option><option selected>30 minutos</option><option>2 horas</option></select></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="pd-toasts" id="toasts" aria-live="polite"></div>
+          </div>
         </div>
-    </section>
+      </div>
+    </div>
 
-    <section id="impacto" class="impact">
-        <div class="container">
-            <h2 class="section-title">Nuestro Impacto</h2>
-            <div class="impact-intro">
-                <p>Nuestro sistema mejora la seguridad, el rendimiento y la organización del acceso a internet institucional.</p>
-            </div>
-            <div class="impact-benefits">
-                <div class="benefit-item"><i class="fas fa-check-circle"></i> Mayor control sobre usuarios y dispositivos.</div>
-                <div class="benefit-item"><i class="fas fa-check-circle"></i> Reducción de accesos no autorizados.</div>
-                <div class="benefit-item"><i class="fas fa-check-circle"></i> Optimización del ancho de banda.</div>
-                <div class="benefit-item"><i class="fas fa-check-circle"></i> Experiencia de conexión más estable.</div>
-                <div class="benefit-item"><i class="fas fa-check-circle"></i> Ahorro de tiempo en administración.</div>
-            </div>
-        </div>
-    </section>
+    <div class="demo-pie">
+      <button class="btn btn-sec btn-chico" type="button" id="btnReiniciar"><svg><use href="#i-refresh"/></svg>Reiniciar la demo</button>
+      <button class="btn btn-sec btn-chico" type="button" id="btnSonido" aria-pressed="true"><svg><use href="#i-bell"/></svg><span>Sonido de avisos: sí</span></button>
+    </div>
+  </div>
+</section>
 
-    <section id="sobre-nosotros" class="about">
-        <div class="container">
-            <h2 class="section-title">Sobre Nosotros</h2>
-            <div class="about-card">
-                <p>Somos una <strong>empresa pionera</strong> apasionado por la tecnología y la conectividad. Creamos soluciones que ayudan a instituciones a gestionar sus redes Wi-Fi de manera sencilla, segura y eficiente.
+<!-- ═══ FUNCIONES ═══ -->
+<section id="funciones" class="seccion-alt">
+  <div class="contenedor">
+    <div class="titular revelar">
+      <span class="eyebrow">Funciones</span>
+      <h2>Todo lo que necesita quien administra la red</h2>
+      <p>Pensado para que lo use cualquier persona de la institución, sin saber de redes.</p>
+    </div>
+    <div class="funciones">
+      <div class="funcion revelar"><div class="ic"><svg><use href="#i-id"/></svg></div><h3>Acceso con CI y correo</h3><p>Solo entra quien está registrado y activo, con un límite de dispositivos por persona.</p></div>
+      <div class="funcion revelar"><div class="ic"><svg><use href="#i-activity"/></svg></div><h3>Panel en vivo</h3><p>Conectados, tráfico de entrada y salida, CPU y RAM del router y prueba de velocidad.</p></div>
+      <div class="funcion revelar"><div class="ic"><svg><use href="#i-user"/></svg></div><h3>Visitantes</h3><p>Piden acceso desde el portal; los aprobás con cantidad de dispositivos y hora de vencimiento.</p></div>
+      <div class="funcion revelar"><div class="ic"><svg><use href="#i-ban"/></svg></div><h3>Control de contenido</h3><p>Catálogo de unos 35 servicios (TikTok, Roblox, ChatGPT…) para bloquear con un clic.</p></div>
+      <div class="funcion revelar"><div class="ic"><svg><use href="#i-file"/></svg></div><h3>Auditoría completa</h3><p>Quién hizo qué, cuándo y qué cambió, con informe imprimible y exportación.</p></div>
+      <div class="funcion revelar"><div class="ic"><svg><use href="#i-upload"/></svg></div><h3>Importar desde Excel</h3><p>Cargá cientos de usuarios desde una planilla; coNETate adivina qué columna es cuál.</p></div>
+      <div class="funcion revelar"><div class="ic"><svg><use href="#i-palette"/></svg></div><h3>Tu marca</h3><p>Logo, color y textos propios en el portal. Sirve para un colegio, un hotel o un negocio.</p></div>
+      <div class="funcion revelar"><div class="ic"><svg><use href="#i-lang"/></svg></div><h3>Tres idiomas</h3><p>El portal habla español, inglés y guaraní (en beta), según el idioma del celular.</p></div>
+      <div class="funcion revelar"><div class="ic"><svg><use href="#i-clock"/></svg></div><h3>Sesiones inteligentes</h3><p>Reconoce el equipo por su MAC, cierra sesiones abandonadas y no se cae por un corte de WiFi.</p></div>
+      <div class="funcion revelar"><div class="ic"><svg><use href="#i-key"/></svg></div><h3>Acceso seguro al panel</h3><p>Contraseñas con bcrypt, ingreso con Google, recuperación por correo y freno de intentos.</p></div>
+      <div class="funcion revelar"><div class="ic"><svg><use href="#i-globe"/></svg></div><h3>Panel desde internet</h3><p>Se administra desde afuera de la institución a través de un túnel HTTPS.</p></div>
+      <div class="funcion revelar"><div class="ic"><svg><use href="#i-phone"/></svg></div><h3>Pensado para el celular</h3><p>Panel y portal adaptados a cualquier pantalla, con tema claro y oscuro.</p></div>
+    </div>
+  </div>
+</section>
 
-Nuestro sistema permite tener el control total del acceso a internet, organizar los dispositivos conectados y mejorar la calidad del servicio para todos los usuarios. Trabajamos con el objetivo de hacer que la conectividad sea más ordenada, accesible y confiable.</p>
-            </div>
-        </div>
-    </section>
+<!-- ═══ PARA QUIÉN ═══ -->
+<section id="para-quien">
+  <div class="contenedor">
+    <div class="titular revelar">
+      <span class="eyebrow">Para quién</span>
+      <h2>Una misma herramienta, muchos lugares</h2>
+      <p>coNETate no está atado a una institución: cada una pone su nombre, su logo y sus colores.</p>
+    </div>
+    <div class="publicos">
+      <div class="publico revelar"><div class="ic" style="background:#0055A4"><svg><use href="#i-school"/></svg></div><h3>Colegios y universidades</h3><p>Alumnos y docentes con su CI; redes sociales bloqueadas en horario de clase.</p></div>
+      <div class="publico revelar"><div class="ic" style="background:#0F7A4F"><svg><use href="#i-bed"/></svg></div><h3>Hoteles y hospedajes</h3><p>Cada huésped como visitante, con acceso que vence el día de salida.</p></div>
+      <div class="publico revelar"><div class="ic" style="background:#C2410C"><svg><use href="#i-store"/></svg></div><h3>Comercios y oficinas</h3><p>WiFi para clientes sin regalar la clave del personal, y un registro de quién usó la red.</p></div>
+      <div class="publico revelar"><div class="ic" style="background:#6D3FD1"><svg><use href="#i-calendar"/></svg></div><h3>Eventos y capacitaciones</h3><p>Lista de asistentes importada desde Excel y acceso solo durante el evento.</p></div>
+    </div>
+  </div>
+</section>
 
-    <section id="soporte" class="support">
-        <div class="container">
-            <h2 class="section-title">Soporte Técnico</h2>
-            <div class="support-wrapper">
-                <div class="support-info">
-                    <p>Nuestro equipo está disponible para brindar asistencia ante cualquier inconveniente relacionado con el sistema. Ofrecemos acompañamiento en la configuración y resolución de problemas.</p>
-                    <h3 class="support-subtitle">Podés comunicarte para:</h3>
-                    <ul class="support-list">
-                        <li><i class="fas fa-plug"></i> Resolver problemas de conexión.</li>
-                        <li><i class="fas fa-users-cog"></i> Gestionar accesos y dispositivos.</li>
-                        <li><i class="fas fa-headset"></i> Recibir asesoramiento técnico.</li>
-                        <li><i class="fas fa-bug"></i> Reportar fallas o incidencias.</li>
-                    </ul>
-                </div>
-                <div class="support-form-container">
-                    <form class="contact-form">
-                        <input type="text" placeholder="Institución / Empresa" required>
-                        <input type="email" placeholder="Correo de contacto" required>
-                        <textarea placeholder="¿En qué podemos ayudarte?" rows="4"></textarea>
-                        <button type="submit" class="btn-submit">Enviar Consulta</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </section>
+<!-- ═══ CAPTURAS ═══ -->
+<section id="capturas" class="seccion-alt">
+  <div class="contenedor">
+    <div class="titular centrado revelar">
+      <span class="eyebrow">El sistema real</span>
+      <h2>Así se ve coNETate funcionando</h2>
+      <p>Capturas del sistema con datos de ejemplo. Cambian con el tema claro u oscuro de esta página.</p>
+    </div>
+    <div class="capturas-tabs" role="tablist" aria-label="Capturas">
+      <button role="tab" aria-selected="true" data-cap="panel">Panel</button>
+      <button role="tab" aria-selected="false" data-cap="login">Portal</button>
+      <button role="tab" aria-selected="false" data-cap="bienvenida">Bienvenida</button>
+    </div>
+    <figure class="captura ancha activa" data-capv="panel" style="margin-inline:auto">
+      <img class="img-oscuro" src="assets/img/panel-dashboard-oscuro.png" alt="Dashboard del panel de coNETate en tema oscuro" loading="lazy" width="1440" height="900">
+      <img class="img-claro" src="assets/img/panel-dashboard-claro.png" alt="Dashboard del panel de coNETate en tema claro" loading="lazy" width="1440" height="900">
+    </figure>
+    <figure class="captura angosta" data-capv="login" style="margin-inline:auto">
+      <img class="img-oscuro" src="assets/img/portal-login-oscuro.png" alt="Portal cautivo de coNETate: ingreso con cédula y correo, tema oscuro" loading="lazy">
+      <img class="img-claro" src="assets/img/portal-login-claro.png" alt="Portal cautivo de coNETate: ingreso con cédula y correo, tema claro" loading="lazy">
+    </figure>
+    <figure class="captura angosta" data-capv="bienvenida" style="margin-inline:auto">
+      <img class="img-oscuro" src="assets/img/portal-bienvenida-oscuro.png" alt="Pantalla de bienvenida del portal, tema oscuro" loading="lazy">
+      <img class="img-claro" src="assets/img/portal-bienvenida-claro.png" alt="Pantalla de bienvenida del portal, tema claro" loading="lazy">
+    </figure>
+  </div>
+</section>
 
-    <footer>
-        <p>&copy; 2026 ConeTate - Innovación en Redes. Villarrica, Paraguay.</p>
-    </footer>
+<!-- ═══ TECNOLOGÍA ═══ -->
+<section id="tecnologia">
+  <div class="contenedor">
+    <div class="titular revelar">
+      <span class="eyebrow">Tecnología</span>
+      <h2>Simple por dentro, para que ande en hardware modesto</h2>
+      <p>Tres piezas: el celular, el router MikroTik y una PC que corre coNETate. No depende de servicios en la nube.</p>
+    </div>
+    <div class="arq">
+      <div class="arq-diagrama revelar">
+        <svg viewBox="0 0 520 330" role="img" aria-label="Diagrama: el celular se conecta al MikroTik; el MikroTik redirige al servidor coNETate; coNETate guarda en SQLite y le ordena al router autorizar la IP">
+          <defs><marker id="flecha" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" class="d-flecha"/></marker></defs>
+          <rect class="d-caja" x="10" y="40" width="130" height="92" rx="14"/>
+          <text class="d-tit" x="75" y="78" text-anchor="middle">Celular</text>
+          <text class="d-sub" x="75" y="98" text-anchor="middle">navegador</text>
+          <text class="d-sub" x="75" y="114" text-anchor="middle">del usuario</text>
+          <rect class="d-acento" x="195" y="40" width="130" height="92" rx="14"/>
+          <text class="d-tit" x="260" y="78" text-anchor="middle">MikroTik</text>
+          <text class="d-sub" x="260" y="98" text-anchor="middle">hAP lite</text>
+          <text class="d-sub" x="260" y="114" text-anchor="middle">RouterOS 6.49</text>
+          <rect class="d-caja" x="380" y="40" width="130" height="92" rx="14"/>
+          <text class="d-tit" x="445" y="78" text-anchor="middle">Internet</text>
+          <text class="d-sub" x="445" y="98" text-anchor="middle">solo para IPs</text>
+          <text class="d-sub" x="445" y="114" text-anchor="middle">autorizadas</text>
+          <rect class="d-acento" x="160" y="210" width="200" height="104" rx="14"/>
+          <text class="d-tit" x="260" y="244" text-anchor="middle">Servidor coNETate</text>
+          <text class="d-sub" x="260" y="264" text-anchor="middle">Python · FastAPI</text>
+          <text class="d-sub" x="260" y="281" text-anchor="middle">panel + portal + API</text>
+          <rect class="d-caja" x="400" y="232" width="110" height="60" rx="12"/>
+          <text class="d-tit" x="455" y="258" text-anchor="middle">SQLite</text>
+          <text class="d-sub" x="455" y="276" text-anchor="middle">datos y auditoría</text>
+          <path class="d-linea" d="M140 86 H190" marker-end="url(#flecha)"/>
+          <text class="d-etq" x="165" y="76" text-anchor="middle">WiFi</text>
+          <path class="d-linea" d="M325 86 H375" marker-end="url(#flecha)"/>
+          <path class="d-linea" d="M240 132 V204" marker-end="url(#flecha)"/>
+          <text class="d-etq" x="234" y="172" text-anchor="end">redirige al portal</text>
+          <path class="d-linea" d="M280 204 V138" marker-end="url(#flecha)"/>
+          <text class="d-etq" x="286" y="172">autoriza la IP (API)</text>
+          <path class="d-linea" d="M360 262 H394" marker-end="url(#flecha)"/>
+        </svg>
+      </div>
+      <div class="stack">
+        <div class="stack-item revelar"><span class="ic"><svg><use href="#i-server"/></svg></span><div><b>Python 3.11 + FastAPI</b><span>Portal, panel y API en un solo servidor; vistas con Jinja2, sin frameworks de frontend.</span></div></div>
+        <div class="stack-item revelar"><span class="ic"><svg><use href="#i-db"/></svg></span><div><b>SQLite + SQLAlchemy</b><span>Una base en un archivo: usuarios, sesiones, reglas, historial de red y auditoría.</span></div></div>
+        <div class="stack-item revelar"><span class="ic"><svg><use href="#i-router"/></svg></span><div><b>MikroTik RouterOS API</b><span>Autoriza IPs, bloquea dominios por DNS y lee los equipos del WiFi y el tráfico.</span></div></div>
+        <div class="stack-item revelar"><span class="ic"><svg><use href="#i-zap"/></svg></span><div><b>Actualización en vivo</b><span>Server-Sent Events: varias pestañas comparten una sola lectura del router.</span></div></div>
+      </div>
+    </div>
+  </div>
+</section>
 
-    <script src="script.js"></script>
+<!-- ═══ NÚMEROS ═══ -->
+<section id="numeros" class="seccion-alt">
+  <div class="contenedor">
+    <div class="titular centrado revelar">
+      <span class="eyebrow">Probado en un router real</span>
+      <h2>Liviano a propósito</h2>
+      <p>Medido sobre un MikroTik hAP lite, uno de los routers más económicos de la marca.</p>
+    </div>
+    <div class="numeros">
+      <div class="numero revelar"><b data-contar="15">0</b><span>equipos conectados a la vez en la prueba en vivo</span></div>
+      <div class="numero revelar"><b data-contar="76" data-sufijo=" MB">0</b><span>de memoria usa el servidor</span></div>
+      <div class="numero revelar"><b data-contar="30" data-sufijo=" s">0</b><span>entre cada revisión automática de las sesiones</span></div>
+      <div class="numero revelar"><b data-contar="35">0</b><span>servicios listos para bloquear en el catálogo</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ PREGUNTAS ═══ -->
+<section id="preguntas">
+  <div class="contenedor">
+    <div class="titular centrado revelar">
+      <span class="eyebrow">Preguntas frecuentes</span>
+      <h2>Lo que suelen preguntar</h2>
+    </div>
+    <div class="faq">
+      <details class="revelar"><summary>¿La persona tiene que instalar algo?</summary><p>No. Al conectarse al WiFi, el celular o la computadora detecta el portal cautivo y abre solo la pantalla de coNETate. Funciona con iPhone, Android, Windows y Mac.</p></details>
+      <details class="revelar"><summary>¿Qué pasa si se corta el WiFi un momento?</summary><p>Nada. La sesión sigue abierta mientras el equipo vuelva antes de la tolerancia configurada (por ejemplo, 30 minutos). Si vuelve con otra IP, coNETate lo reconoce por su MAC y lo deja pasar directo.</p></details>
+      <details class="revelar"><summary>¿El panel necesita internet?</summary><p>No. Todo (fuentes, gráficos, íconos) está en el propio servidor, así que el panel abre aunque la red se haya quedado sin salida a internet o el router esté caído.</p></details>
+      <details class="revelar"><summary>¿Se puede saltar el bloqueo de una red social?</summary><p>coNETate fuerza el DNS de todos los equipos al router y cierra los atajos más comunes: DNS cifrado (DoH y DoT) y el Private Relay del iPhone. Un equipo que ya tenía la página abierta puede tardar unos minutos en notar el bloqueo.</p></details>
+      <details class="revelar"><summary>¿Funciona con cualquier router?</summary><p>Está hecho para routers MikroTik con RouterOS, porque usa su API para autorizar equipos y bloquear dominios. Se probó en un hAP lite, que es de los más chicos.</p></details>
+      <details class="revelar"><summary>¿Qué datos guarda?</summary><p>Cédula, nombre y correo de cada persona, sus sesiones (IP, equipo, inicio y fin, consumo) y la auditoría de lo que hicieron los administradores. Todo queda en el servidor de la institución, no en la nube.</p></details>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ CIERRE ═══ -->
+<section style="padding-top:0">
+  <div class="contenedor">
+    <div class="cierre revelar">
+      <span data-mbopi="funcionando" data-mbopi-ficha="no"></span>
+      <h2>Te presento a Mbopi</h2>
+      <p>«Mbopi» es murciélago en guaraní: se orienta con ondas, como el WiFi. Es la mascota de coNETate y te acompaña en el portal, en el panel y cuando algo falla.</p>
+      <div class="hero-botones">
+        <a class="btn btn-primario" href="#demo"><svg><use href="#i-play"/></svg>Volver a la demo</a>
+        <a class="btn btn-sec" href="https://github.com/Oscar2244" target="_blank" rel="noopener"><svg><use href="#i-github"/></svg>Ver en GitHub</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="contenedor pie">
+    <div>
+      <span class="logo">co<span class="logo-net">NET</span>ate</span>
+      <p>Proyecto de tesis de Ingeniería Informática · UNVES · Paraguay, 2026.</p>
+    </div>
+    <p>Desarrollado por <b style="color:var(--text2)">Oscar David Ocampos Ortigoza</b> y <b style="color:var(--text2)">Elías Orue Carranza</b>.<br>Las capturas y la demo usan datos de ejemplo.</p>
+  </div>
+</footer>
+
+<script src="assets/js/sitio.js"></script>
 </body>
 </html>

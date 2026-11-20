@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 470" width="1200" height="470" role="img" aria-label="Recorrido de un usuario por coNETate en cuatro pasos">
+<title>Cómo funciona coNETate: del WiFi a internet en cuatro pasos</title>
+<defs>
+  <linearGradient id="fondo" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0E1117"/><stop offset="1" stop-color="#101C2E"/></linearGradient>
+</defs>
+<style>
+  text { font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif; }
+  .arista { fill: none; stroke: #2A3A55; stroke-width: 3; }
+  .flujo { fill: none; stroke: #4FC3F7; stroke-opacity: .25; stroke-width: 3; stroke-dasharray: 6 12; animation: corre 1.2s linear infinite; }
+  @keyframes corre { to { stroke-dashoffset: -18; } }
+  .led { animation: led 1.2s steps(2) infinite; }
+  @keyframes led { 50% { opacity: .2; } }
+  .etiqueta { font-size: 19px; font-weight: 700; fill: #ECEEF2; }
+  .sub { font-size: 14px; fill: #8D96A6; }
+</style>
+<rect width="1200" height="470" rx="24" fill="url(#fondo)"/>
+<rect x=".5" y=".5" width="1199" height="469" rx="24" fill="none" stroke="#1E2A3E"/>
+<circle cx="528" cy="40" r="15" fill="#1A2436" stroke="#2C3B55"/><g opacity="0"><animate attributeName="opacity" dur="12.0s" repeatCount="indefinite" values="0;0;1;1;0;0" keyTimes="0.0000;0.0000;0.0208;0.2292;0.2500;1.0000"/><circle cx="528" cy="40" r="15" fill="#6CB2FF"/></g><text x="528" y="46" text-anchor="middle" font-size="16" font-weight="700" fill="#ECEEF2">1</text><circle cx="576" cy="40" r="15" fill="#1A2436" stroke="#2C3B55"/><g opacity="0"><animate attributeName="opacity" dur="12.0s" repeatCount="indefinite" values="0;0;1;1;0;0" keyTimes="0.0000;0.2500;0.2708;0.4792;0.5000;1.0000"/><circle cx="576" cy="40" r="15" fill="#6CB2FF"/></g><text x="576" y="46" text-anchor="middle" font-size="16" font-weight="700" fill="#ECEEF2">2</text><circle cx="624" cy="40" r="15" fill="#1A2436" stroke="#2C3B55"/><g opacity="0"><animate attributeName="opacity" dur="12.0s" repeatCount="indefinite" values="0;0;1;1;0;0" keyTimes="0.0000;0.5000;0.5208;0.7292;0.7500;1.0000"/><circle cx="624" cy="40" r="15" fill="#6CB2FF"/></g><text x="624" y="46" text-anchor="middle" font-size="16" font-weight="700" fill="#ECEEF2">3</text><circle cx="672" cy="40" r="15" fill="#1A2436" stroke="#2C3B55"/><g opacity="0"><animate attributeName="opacity" dur="12.0s" repeatCount="indefinite" values="0;0;1;1;0;0" keyTimes="0.0000;0.7500;0.7708;0.9792;1.0000;1.0000"/><circle cx="672" cy="40" r="15" fill="#6CB2FF"/></g><text x="672" y="46" text-anchor="middle" font-size="16" font-weight="700" fill="#ECEEF2">4</text>
+
+<path class="arista" d="M205 232 L455 232"/><path class="flujo" d="M205 232 L455 232"/>
+<path class="arista" d="M585 222 C720 222 860 120 985 120"/><path class="flujo" d="M585 222 C720 222 860 120 985 120"/>
+<path class="arista" d="M585 242 C720 242 860 345 975 345"/><path class="flujo" d="M585 242 C720 242 860 345 975 345"/>
+
+<!-- Celular -->
+<rect x="112" y="176" width="56" height="102" rx="12" fill="#152033" stroke="#3B5478" stroke-width="2.5"/>
+<rect x="119" y="190" width="42" height="72" rx="5" fill="#0B1220"/>
+<rect x="132" y="181" width="16" height="3.5" rx="1.75" fill="#3B5478"/>
+<g opacity="0"><animate attributeName="opacity" dur="12.0s" repeatCount="indefinite" values="0;0;1;1;0;0" keyTimes="0.0000;0.0000;0.0208;0.3875;0.4083;1.0000"/><path d="M131 218 a13 13 0 0 1 18 0 M134.5 222 a8 8 0 0 1 11 0" fill="none" stroke="#6C7A93" stroke-width="2.5" stroke-linecap="round"/><circle cx="140" cy="226" r="2.2" fill="#6C7A93"/></g>
+<g opacity="0"><animate attributeName="opacity" dur="12.0s" repeatCount="indefinite" values="0;0;1;1;0;0" keyTimes="0.0000;0.4083;0.4292;0.7375;0.7583;1.0000"/><rect x="128" y="203" width="24" height="5" rx="2.5" fill="#3A4A66"/><rect x="128" y="213" width="24" height="5" rx="2.5" fill="#3A4A66"/><rect x="128" y="224" width="24" height="8" rx="3" fill="#FFC53D"/></g>
+<g opacity="0"><animate attributeName="opacity" dur="12.0s" repeatCount="indefinite" values="0;0;1;1;0;0" keyTimes="0.0000;0.7583;0.7792;0.9792;1.0000;1.0000"/><circle cx="140" cy="222" r="13" fill="#3DD68C" opacity=".18"/><path d="M133 222 l5 5 l10 -11" fill="none" stroke="#3DD68C" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/></g>
+<text class="etiqueta" x="140" y="312" text-anchor="middle">Tu celular</text>
+<text class="sub" x="140" y="333" text-anchor="middle">CI + correo</text>
+
+<!-- MikroTik -->
+<line x1="482" y1="204" x2="474" y2="170" stroke="#3B5478" stroke-width="4" stroke-linecap="round"/>
+<line x1="558" y1="204" x2="566" y2="170" stroke="#3B5478" stroke-width="4" stroke-linecap="round"/>
+<rect x="455" y="204" width="130" height="56" rx="12" fill="#152033" stroke="#3B5478" stroke-width="2.5"/>
+<g opacity="0"><animate attributeName="opacity" dur="12.0s" repeatCount="indefinite" values="0;0;1;1;0;0" keyTimes="0.0000;0.6333;0.6542;0.9792;1.0000;1.0000"/><rect x="455" y="204" width="130" height="56" rx="12" fill="none" stroke="#3DD68C" stroke-width="3"/></g>
+<circle class="led" cx="478" cy="232" r="4" fill="#3DD68C"/>
+<circle class="led" cx="494" cy="232" r="4" fill="#6CB2FF" style="animation-delay:.4s"/>
+<circle cx="510" cy="232" r="4" fill="#3B5478"/>
+<rect x="528" y="226" width="42" height="12" rx="3" fill="#0B1220"/>
+<text class="etiqueta" x="520" y="292" text-anchor="middle">MikroTik hAP lite</text>
+<text class="sub" x="520" y="313" text-anchor="middle">address-list «autorizados»</text>
+<g opacity="0"><animate attributeName="opacity" dur="12.0s" repeatCount="indefinite" values="0;0;1;1;0;0" keyTimes="0.0000;0.6333;0.6542;0.9792;1.0000;1.0000"/><rect x="452" y="128" width="136" height="32" rx="16" fill="#3DD68C" fill-opacity=".15" stroke="#3DD68C"/><text x="520" y="150" text-anchor="middle" font-size="15" font-weight="700" fill="#3DD68C">IP autorizada ✓</text></g>
+
+<!-- Internet -->
+<circle cx="1040" cy="120" r="50" fill="#152033" stroke="#3B5478" stroke-width="2.5"/>
+<ellipse cx="1040" cy="120" rx="22" ry="50" fill="none" stroke="#3B5478" stroke-width="2"/>
+<path d="M990 120 H1090 M997 95 H1083 M997 145 H1083" stroke="#3B5478" stroke-width="2"/>
+<text class="etiqueta" x="1040" y="196" text-anchor="middle">Internet</text>
+<g opacity="0"><animate attributeName="opacity" dur="12.0s" repeatCount="indefinite" values="0;0;1;1;0;0" keyTimes="0.0000;0.1167;0.1375;0.2208;0.2417;1.0000"/><circle cx="790" cy="160" r="20" fill="#FF6B6B" fill-opacity=".15" stroke="#FF6B6B" stroke-width="2.5"/><path d="M781 151 l18 18 m0 -18 l-18 18" stroke="#FF6B6B" stroke-width="3.5" stroke-linecap="round"/></g>
+
+<!-- Servidor coNETate -->
+<rect x="975" y="305" width="130" height="84" rx="12" fill="#152033" stroke="#3B5478" stroke-width="2.5"/>
+<g opacity="0"><animate attributeName="opacity" dur="12.0s" repeatCount="indefinite" values="0;0;1;1;0;0" keyTimes="0.0000;0.3833;0.4042;0.6292;0.6500;1.0000"/><rect x="975" y="305" width="130" height="84" rx="12" fill="none" stroke="#FFC53D" stroke-width="3"/></g>
+<rect x="990" y="320" width="100" height="14" rx="4" fill="#0B1220"/>
+<rect x="990" y="340" width="100" height="14" rx="4" fill="#0B1220"/>
+<rect x="990" y="360" width="100" height="14" rx="4" fill="#0B1220"/>
+<circle class="led" cx="1078" cy="327" r="3.5" fill="#3DD68C"/>
+<text class="etiqueta" x="1040" y="412" text-anchor="middle">coNETate (FastAPI)</text>
+
+<circle r="8" fill="#FFC53D" opacity="0"><animateMotion dur="12.0s" repeatCount="indefinite" path="M205 232 L455 232" calcMode="linear" keyPoints="0;0;1;1" keyTimes="0.0000;0.0167;0.1167;1.0000"/><animate attributeName="opacity" dur="12.0s" repeatCount="indefinite" values="0;0;1;1;0;0" keyTimes="0.0000;0.0125;0.0167;0.1167;0.1292;1.0000"/></circle>
+<circle r="8" fill="#FFC53D" opacity="0"><animateMotion dur="12.0s" repeatCount="indefinite" path="M205 232 L455 232 L585 242 C720 242 860 345 975 345" calcMode="linear" keyPoints="0;0;1;1" keyTimes="0.0000;0.2667;0.4083;1.0000"/><animate attributeName="opacity" dur="12.0s" repeatCount="indefinite" values="0;0;1;1;0;0" keyTimes="0.0000;0.2625;0.2667;0.4083;0.4208;1.0000"/></circle>
+<circle r="8" fill="#3DD68C" opacity="0"><animateMotion dur="12.0s" repeatCount="indefinite" path="M975 345 C860 345 720 242 585 242 L520 242" calcMode="linear" keyPoints="0;0;1;1" keyTimes="0.0000;0.5167;0.6333;1.0000"/><animate attributeName="opacity" dur="12.0s" repeatCount="indefinite" values="0;0;1;1;0;0" keyTimes="0.0000;0.5125;0.5167;0.6333;0.6458;1.0000"/></circle>
+<circle r="8" fill="#3DD68C" opacity="0"><animateMotion dur="12.0s" repeatCount="indefinite" path="M205 232 L455 232 L585 222 C720 222 860 120 985 120" calcMode="linear" keyPoints="0;0;1;1" keyTimes="0.0000;0.7583;0.8750;1.0000"/><animate attributeName="opacity" dur="12.0s" repeatCount="indefinite" values="0;0;1;1;0;0" keyTimes="0.0000;0.7542;0.7583;0.8750;0.8875;1.0000"/></circle>
+<circle r="8" fill="#3DD68C" opacity="0"><animateMotion dur="12.0s" repeatCount="indefinite" path="M205 232 L455 232 L585 222 C720 222 860 120 985 120" calcMode="linear" keyPoints="0;0;1;1" keyTimes="0.0000;0.8000;0.9167;1.0000"/><animate attributeName="opacity" dur="12.0s" repeatCount="indefinite" values="0;0;1;1;0;0" keyTimes="0.0000;0.7958;0.8000;0.9167;0.9292;1.0000"/></circle>
+<circle r="8" fill="#3DD68C" opacity="0"><animateMotion dur="12.0s" repeatCount="indefinite" path="M205 232 L455 232 L585 222 C720 222 860 120 985 120" calcMode="linear" keyPoints="0;0;1;1" keyTimes="0.0000;0.8417;0.9583;1.0000"/><animate attributeName="opacity" dur="12.0s" repeatCount="indefinite" values="0;0;1;1;0;0" keyTimes="0.0000;0.8375;0.8417;0.9583;0.9708;1.0000"/></circle>
+
+<g opacity="0"><animate attributeName="opacity" dur="12.0s" repeatCount="indefinite" values="0;0;1;1;0;0" keyTimes="0.0000;0.0042;0.0250;0.2292;0.2500;1.0000"/><text x="600" y="440" text-anchor="middle" font-size="22" fill="#ECEEF2">Te conectás al WiFi: el router todavía no te deja salir a internet</text></g><g opacity="0"><animate attributeName="opacity" dur="12.0s" repeatCount="indefinite" values="0;0;1;1;0;0" keyTimes="0.0000;0.2542;0.2750;0.4792;0.5000;1.0000"/><text x="600" y="440" text-anchor="middle" font-size="22" fill="#ECEEF2">Cualquier página te lleva al portal de coNETate: cédula + correo</text></g><g opacity="0"><animate attributeName="opacity" dur="12.0s" repeatCount="indefinite" values="0;0;1;1;0;0" keyTimes="0.0000;0.5042;0.5250;0.7292;0.7500;1.0000"/><text x="600" y="440" text-anchor="middle" font-size="22" fill="#ECEEF2">coNETate valida tus datos y autoriza tu IP en el MikroTik</text></g><g opacity="0"><animate attributeName="opacity" dur="12.0s" repeatCount="indefinite" values="0;0;1;1;0;0" keyTimes="0.0000;0.7542;0.7750;0.9792;1.0000;1.0000"/><text x="600" y="440" text-anchor="middle" font-size="22" fill="#ECEEF2">¡Listo! El router ya te deja pasar a internet</text></g>
+</svg>
